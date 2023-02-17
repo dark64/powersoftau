@@ -68,7 +68,7 @@ At the time of writing this, the last response was https://github.com/privacy-sc
 
 ### 2. Reduce powers
 
-Perpetual Powers of Tau supports circuits of up to `2^28` (260+ million) constraints. To avoid long computations, we can reduce the parameters to the power of our choice. In this example, we will reduce the power to `21` (up to 2M constraints).
+Perpetual Powers of Tau supports circuits of up to `2^28` (260+ million) constraints. We can reduce the parameters to the power of our choice. In this example, we will reduce the power to `21` (up to 2M constraints).
 
 ```bash
 $ cargo run --release --bin reduce_powers challenge_0075 challenge_reduced 28 21 256
@@ -76,7 +76,7 @@ $ cargo run --release --bin reduce_powers challenge_0075 challenge_reduced 28 21
 
 ### 3. Apply a random beacon
 
-To finalize the setup, we apply a random beacon to the reduced challenge. In this example, we are going to use an ethereum block height `16627102` with a corresponding hash `0x171147a580764b8445aa1deaeedf8a81436ca1c9c447612e198cb41376aec3a6`. The process and code for calculating the beacon value should be announced before the block appears.
+To finalize the setup, we apply a random beacon to the final challenge. In this example, we are going to use an ethereum block height `16627102` with a corresponding hash `0x171147a580764b8445aa1deaeedf8a81436ca1c9c447612e198cb41376aec3a6`. The process and code for calculating the beacon value should be announced before the block appears.
 
 ```bash
 $ cargo run --release --bin beacon_constrained challenge_reduced response_final 21 256 171147a580764b8445aa1deaeedf8a81436ca1c9c447612e198cb41376aec3a6 10
