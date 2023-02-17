@@ -99,6 +99,8 @@ Licensed under either of
 
 at your option.
 
+Originally forked from [phase2-bn254](https://github.com/kobigurk/phase2-bn254)
+
 ### Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally
