@@ -122,8 +122,8 @@ fn merge_pairs<E: Engine, G: CurveAffine<Engine = E, Scalar = E::Fr>>(
         .map(|_| G::Scalar::rand(rng).into_repr())
         .collect();
 
-    let s = dense_multiexp(&v1, &randomness[..]).into_affine();
-    let sx = dense_multiexp(&v2, &randomness[..]).into_affine();
+    let s = dense_multiexp(v1, &randomness[..]).into_affine();
+    let sx = dense_multiexp(v2, &randomness[..]).into_affine();
 
     (s, sx)
 }

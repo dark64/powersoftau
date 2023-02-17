@@ -183,9 +183,9 @@ pub fn verify_transform<E: Engine>(
 ) -> bool {
     assert_eq!(digest.len(), 64);
 
-    let tau_g2_s = compute_g2_s::<E>(&digest, &key.tau_g1.0, &key.tau_g1.1, 0);
-    let alpha_g2_s = compute_g2_s::<E>(&digest, &key.alpha_g1.0, &key.alpha_g1.1, 1);
-    let beta_g2_s = compute_g2_s::<E>(&digest, &key.beta_g1.0, &key.beta_g1.1, 2);
+    let tau_g2_s = compute_g2_s::<E>(digest, &key.tau_g1.0, &key.tau_g1.1, 0);
+    let alpha_g2_s = compute_g2_s::<E>(digest, &key.alpha_g1.0, &key.alpha_g1.1, 1);
+    let beta_g2_s = compute_g2_s::<E>(digest, &key.beta_g1.0, &key.beta_g1.1, 2);
 
     // Check the proofs-of-knowledge for tau/alpha/beta
 
@@ -284,9 +284,9 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
         use itertools::MinMaxResult::MinMax;
         assert_eq!(digest.len(), 64);
 
-        let tau_g2_s = compute_g2_s::<E>(&digest, &key.tau_g1.0, &key.tau_g1.1, 0);
-        let alpha_g2_s = compute_g2_s::<E>(&digest, &key.alpha_g1.0, &key.alpha_g1.1, 1);
-        let beta_g2_s = compute_g2_s::<E>(&digest, &key.beta_g1.0, &key.beta_g1.1, 2);
+        let tau_g2_s = compute_g2_s::<E>(digest, &key.tau_g1.0, &key.tau_g1.1, 0);
+        let alpha_g2_s = compute_g2_s::<E>(digest, &key.alpha_g1.0, &key.alpha_g1.1, 1);
+        let beta_g2_s = compute_g2_s::<E>(digest, &key.beta_g1.0, &key.beta_g1.1, 2);
 
         // Check the proofs-of-knowledge for tau/alpha/beta
 
@@ -319,7 +319,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     chunk_size,
                     input_is_compressed,
                     check_input_for_correctness,
-                    &input_map,
+                    input_map,
                 )
                 .expect("must read a first chunk from `challenge`");
             after
@@ -328,7 +328,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     chunk_size,
                     output_is_compressed,
                     check_output_for_correctness,
-                    &output_map,
+                    output_map,
                 )
                 .expect("must read a first chunk from `response`");
 
@@ -397,7 +397,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         input_is_compressed,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -411,7 +411,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         output_is_compressed,
                         check_output_for_correctness,
-                        &output_map,
+                        output_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -475,7 +475,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         input_is_compressed,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -489,7 +489,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         output_is_compressed,
                         check_output_for_correctness,
-                        &output_map,
+                        output_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -555,7 +555,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         UseCompression::Yes,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -580,7 +580,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         UseCompression::Yes,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -638,7 +638,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         compression,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -669,7 +669,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         compression,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .unwrap_or_else(|_| {
                         panic!(
@@ -776,7 +776,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::TauG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
             UseCompression::No => self
                 .read_points_chunk::<<E::G1Affine as CurveAffine>::Uncompressed>(
@@ -785,7 +785,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::TauG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
         };
 
@@ -797,7 +797,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::TauG2,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
             UseCompression::No => self
                 .read_points_chunk::<<E::G2Affine as CurveAffine>::Uncompressed>(
@@ -806,7 +806,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::TauG2,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
         };
 
@@ -818,7 +818,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::AlphaG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
             UseCompression::No => self
                 .read_points_chunk::<<E::G1Affine as CurveAffine>::Uncompressed>(
@@ -827,7 +827,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::AlphaG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
         };
 
@@ -839,7 +839,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::BetaG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
             UseCompression::No => self
                 .read_points_chunk::<<E::G1Affine as CurveAffine>::Uncompressed>(
@@ -848,7 +848,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::BetaG1,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?,
         };
 
@@ -860,7 +860,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::BetaG2,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?;
 
                 points[0]
@@ -872,7 +872,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     ElementType::BetaG2,
                     compression,
                     checked,
-                    &input_map,
+                    input_map,
                 )?;
 
                 points[0]
@@ -1008,25 +1008,25 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
             ElementType::TauG1 => {
                 for (i, c) in self.tau_powers_g1.clone().iter().enumerate() {
                     let index = chunk_start + i;
-                    self.write_point(index, c, compression, element_type.clone(), output_map)?;
+                    self.write_point(index, c, compression, element_type, output_map)?;
                 }
             }
             ElementType::TauG2 => {
                 for (i, c) in self.tau_powers_g2.clone().iter().enumerate() {
                     let index = chunk_start + i;
-                    self.write_point(index, c, compression, element_type.clone(), output_map)?;
+                    self.write_point(index, c, compression, element_type, output_map)?;
                 }
             }
             ElementType::AlphaG1 => {
                 for (i, c) in self.alpha_tau_powers_g1.clone().iter().enumerate() {
                     let index = chunk_start + i;
-                    self.write_point(index, c, compression, element_type.clone(), output_map)?;
+                    self.write_point(index, c, compression, element_type, output_map)?;
                 }
             }
             ElementType::BetaG1 => {
                 for (i, c) in self.beta_tau_powers_g1.clone().iter().enumerate() {
                     let index = chunk_start + i;
-                    self.write_point(index, c, compression, element_type.clone(), output_map)?;
+                    self.write_point(index, c, compression, element_type, output_map)?;
                 }
             }
             ElementType::BetaG2 => {
@@ -1035,7 +1035,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                     index,
                     &self.beta_g2.clone(),
                     compression,
-                    element_type.clone(),
+                    element_type,
                     output_map,
                 )?
             }
@@ -1192,7 +1192,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         input_is_compressed,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .expect("must read a first chunk");
 
@@ -1250,7 +1250,7 @@ impl<'a, E: Engine> BatchedAccumulator<'a, E> {
                         size,
                         input_is_compressed,
                         check_input_for_correctness,
-                        &input_map,
+                        input_map,
                     )
                     .expect("must read a first chunk");
                 assert_eq!(

@@ -99,10 +99,10 @@ fn main() {
 
         // This converts all of the elements into Lagrange coefficients
         // for later construction of interpolation polynomials
-        g1_coeffs.ifft(&worker);
-        g2_coeffs.ifft(&worker);
-        g1_alpha_coeffs.ifft(&worker);
-        g1_beta_coeffs.ifft(&worker);
+        g1_coeffs.ifft(worker);
+        g2_coeffs.ifft(worker);
+        g1_alpha_coeffs.ifft(worker);
+        g1_beta_coeffs.ifft(worker);
 
         let g1_coeffs = g1_coeffs.into_coeffs();
         let g2_coeffs = g2_coeffs.into_coeffs();

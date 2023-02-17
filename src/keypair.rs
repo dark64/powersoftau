@@ -181,31 +181,31 @@ impl<E: Engine> PublicKey<E> {
         let g1_size = parameters.curve.g1;
         let g2_size = parameters.curve.g2;
 
-        (&mut output_map[position..]).write_all(&self.tau_g1.0.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.tau_g1.0.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.tau_g1.1.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.tau_g1.1.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.alpha_g1.0.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.alpha_g1.0.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.alpha_g1.1.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.alpha_g1.1.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.beta_g1.0.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.beta_g1.0.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.beta_g1.1.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.beta_g1.1.into_uncompressed().as_ref())?;
         position += g1_size;
 
-        (&mut output_map[position..]).write_all(&self.tau_g2.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.tau_g2.into_uncompressed().as_ref())?;
         position += g2_size;
 
-        (&mut output_map[position..]).write_all(&self.alpha_g2.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.alpha_g2.into_uncompressed().as_ref())?;
         position += g2_size;
 
-        (&mut output_map[position..]).write_all(&self.beta_g2.into_uncompressed().as_ref())?;
+        (&mut output_map[position..]).write_all(self.beta_g2.into_uncompressed().as_ref())?;
 
         output_map.flush()?;
 

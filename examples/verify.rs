@@ -230,7 +230,7 @@ fn new_accumulator_for_verify(parameters: &CeremonyParams<Bn256>) -> BatchedAccu
                 .map_mut(&file)
                 .expect("unable to create a memory map")
         };
-        BatchedAccumulator::generate_initial(&mut writable_map, UseCompression::No, &parameters)
+        BatchedAccumulator::generate_initial(&mut writable_map, UseCompression::No, parameters)
             .expect("generation of initial accumulator is successful");
         writable_map
             .flush()
@@ -252,7 +252,7 @@ fn new_accumulator_for_verify(parameters: &CeremonyParams<Bn256>) -> BatchedAccu
         &readable_map,
         CheckForCorrectness::Yes,
         UseCompression::No,
-        &parameters,
+        parameters,
     )
     .expect("unable to read uncompressed accumulator")
 }
@@ -319,7 +319,7 @@ fn main() {
         };
 
         (&mut writable_map[0..])
-            .write_all(&memory_slice[..])
+            .write_all(memory_slice)
             .expect("unable to write a default hash to mmap");
         writable_map.flush().expect("must flush the memory map");
 
@@ -418,10 +418,10 @@ fn main() {
 
         // This converts all of the elements into Lagrange coefficients
         // for later construction of interpolation polynomials
-        g1_coeffs.ifft(&worker);
-        g2_coeffs.ifft(&worker);
-        g1_alpha_coeffs.ifft(&worker);
-        g1_beta_coeffs.ifft(&worker);
+        g1_coeffs.ifft(worker);
+        g2_coeffs.ifft(worker);
+        g1_alpha_coeffs.ifft(worker);
+        g1_beta_coeffs.ifft(worker);
 
         let g1_coeffs = g1_coeffs.into_coeffs();
         let g2_coeffs = g2_coeffs.into_coeffs();
