@@ -4,52 +4,40 @@
 
 This is a [multi-party computation](https://en.wikipedia.org/wiki/Secure_multi-party_computation) (MPC) ceremony which constructs partial zk-SNARK parameters for _all_ circuits up to a depth of 2<sup>21</sup>. It works by taking a step that is performed by all zk-SNARK MPCs and performing it in just one single ceremony. This makes individual zk-SNARK MPCs much cheaper and allows them to scale to practically unbounded numbers of participants.
 
-This protocol is described in a [forthcoming paper](https://eprint.iacr.org/2017/1050). It produces parameters for an adaptation of [Jens Groth's 2016 pairing-based proving system](https://eprint.iacr.org/2016/260) using the [BLS12-381](https://github.com/ebfull/pairing/tree/master/src/bls12_381) elliptic curve construction. The security proof relies on a randomness beacon being applied at the end of the ceremony.
+This protocol is described in this [paper](https://eprint.iacr.org/2017/1050). It produces parameters for an adaptation of [Jens Groth's 2016 pairing-based proving system](https://eprint.iacr.org/2016/260) using the [BLS12-381](https://github.com/ebfull/pairing/tree/master/src/bls12_381) elliptic curve construction. The security proof relies on a randomness beacon being applied at the end of the ceremony.
 
 ## Contributions
 
-Extended to support Ethereum's BN256 curve and made it easier to change size of the ceremony. In addition proof generation process can be done in memory constrained environments now. Benchmark is around `1.3 Gb` of memory and `3 hours` for a `2^26` power of tau on BN256 curve on my personal laptop
-
-## Instructions
-
-Instructions for a planned ceremony will be posted when everything is tested and finalized.
+Extended to support Ethereum's BN256 curve and made it easier to change size of the ceremony. In addition proof generation process can be done in memory constrained environments now.
 
 ---
-## To run the ceremony on your laptop:
+## To run the ceremony on your machine:
 
 1. Preparation:
 
 ```
-rustup update # tested on rustup 1.17.0
-cargo build
+rustup update # tested on rustup 1.24.3 and rustc 1.55.0
+cargo build --release
 ```
 
-2. Put `response` file from the previous ceremony to root directory.
+2. Put the `challenge` and `response` file from the previous ceremony to root directory.
 3. To generate `new_challenge` run:
 
 ```
-cargo run --release --bin verify_transform_constrained # this will generate new_challenge from response file
+cargo run --release --bin verify_transform_constrained challenge response new_challenge 21 256
 ```
 
-4. Backup old files and replace `challenge` file:
+4. Run ceremony:
 
 ```
-mv challenge challenge_old
-mv response response_old
-mv new_challenge challenge
-```
-
-5. Run ceremony:
-
-```
-cargo run --release --bin compute_constrained # generate response file
+cargo run --release --bin compute_constrained new_challenge new_response 21 256
 ```
 
 Put your hash from output response to private gist (example: https://gist.github.com/skywinder/c35ab03c66c6b200b33ea2f388a6df89)
 
-6. Reboot laptop to clean up toxic waste.
+5. Reboot your machine to clean up toxic waste.
 
-7. Save `response` file and give it to the next participant.
+6. Save the newly generated `response` file and give it to the next participant.
 
 ## Recommendations from original ceremony
 
