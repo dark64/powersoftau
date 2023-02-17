@@ -15,22 +15,22 @@ Extended to support Ethereum's BN256 curve and made it easier to change size of 
 
 1. Preparation:
 
-```
-rustup update # tested on rustup 1.24.3 and rustc 1.55.0
-cargo build --release
+```bash
+$ rustup update # tested on rustup 1.24.3 and rustc 1.55.0
+$ cargo build --release
 ```
 
 2. Put the `challenge` and `response` file from the previous ceremony to root directory.
 3. To generate `new_challenge` run:
 
-```
-cargo run --release --bin verify_transform_constrained challenge response new_challenge 21 256
+```bash
+$ cargo run --release --bin verify_transform_constrained challenge response new_challenge 21 256
 ```
 
 4. Run ceremony:
 
-```
-cargo run --release --bin compute_constrained new_challenge new_response 21 256
+```bash
+$ cargo run --release --bin compute_constrained new_challenge new_response 21 256
 ```
 
 Put your hash from output response to private gist (example: https://gist.github.com/skywinder/c35ab03c66c6b200b33ea2f388a6df89)
@@ -57,6 +57,38 @@ Participants of the ceremony sample some randomness, perform a computation, and 
 * lots of other ideas we can't think of
 
 It is totally up to the participants. In general, participants should beware of side-channel attacks and assume that remnants of the randomness will be in RAM after the computation has finished.
+
+## Perpetual Powers of Tau
+
+In this section we are going to use a response from [Perpetual Powers of Tau](https://github.com/privacy-scaling-explorations/perpetualpowersoftau) to prepare for a circuit-specific ceremony (also known as phase 2).
+
+### 1. Pick a response
+
+At the time of writing this, the last response was https://github.com/privacy-scaling-explorations/perpetualpowersoftau/tree/master/0074_daniel_response
+
+### 2. Reduce powers
+
+Perpetual Powers of Tau supports circuits of up to `2^28` (260+ million) constraints. To avoid long computations, we can reduce the parameters to the power of our choice. In this example, we will reduce the power to `21` (up to 2M constraints).
+
+```bash
+$ cargo run --release --bin reduce_powers challenge_0075 challenge_reduced 28 21 256
+```
+
+### 3. Apply a random beacon
+
+To finalize the setup, we apply a random beacon to the reduced challenge. In this example, we are going to use an ethereum block height `16627102` with a corresponding hash `0x171147a580764b8445aa1deaeedf8a81436ca1c9c447612e198cb41376aec3a6`. The process and code for calculating the beacon value should be announced before the block appears.
+
+```bash
+$ cargo run --release --bin beacon_constrained challenge_reduced response_final 21 256 171147a580764b8445aa1deaeedf8a81436ca1c9c447612e198cb41376aec3a6 10
+```
+
+### 4. Prepare phase 2
+
+```bash
+$ cargo run --release --bin prepare_phase2 response_final 21 256
+```
+
+This command will generate parameters for various circuit depths which we can use in the [phase 2](https://zokrates.github.io/toolbox/trusted_setup.html).
 
 ## License
 
